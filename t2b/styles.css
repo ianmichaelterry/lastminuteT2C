@@ -1,0 +1,320 @@
+/* Add styles for Parsons problem layout and drag-and-drop */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background: #f6f8fa;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+}
+
+#problem-container {
+    margin: 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    max-width: 700px;
+}
+
+#problem-prompt {
+    font-size: 1.1em;
+    margin-bottom: 18px;
+}
+
+#code-blocks-container {
+    min-height: 120px;
+    border: 1px dashed #bbb;
+    border-radius: 6px;
+    padding: 12px;
+    background: #f4f8ff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.code-block {
+    background: #e3eaff;
+    border: 1px solid #b3c6ff;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    cursor: grab;
+    user-select: none;
+    transition: background 0.2s;
+    max-width: 580px; /* updated: allow code block to be wider */
+    white-space: pre-wrap; /* allow long lines to wrap */
+    word-break: break-word; /* break long words if needed */
+}
+
+.code-block.dragging {
+    opacity: 0.5;
+    background: #d0d8f7;
+}
+
+.code-block.placeholder {
+    opacity: 0.3;
+    border-style: dotted;
+}
+
+.parsons-layout {
+    display: flex;
+    gap: 32px;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 100%; /* Ensure children stretch to same height */
+    min-width: 700px; /* Ensure enough width for both boxes */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.parsons-box {
+    flex: 1 1 0;
+    min-width: 320px; /* Increased min-width for each box */
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    /* Make both boxes stretch to the same height */
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.code-blocks-container {
+    flex: 1 1 auto;
+    min-height: 220px; /* Increased for more vertical space */
+    border: 1px dashed #bbb;
+    border-radius: 6px;
+    padding: 12px;
+    background: #f4f8ff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 340px; /* updated: increased for wider blocks */
+    max-width: 600px; /* updated: set a larger max width */
+    /* Allow container to grow to fit all blocks, but not overflow */
+    height: auto;
+    max-height: none;
+    box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+  .parsons-layout {
+    flex-direction: column;
+    min-width: unset;
+    gap: 16px;
+  }
+  .parsons-box {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+#navigation {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+button {
+    margin: 0 4px;
+}
+
+.container {
+    margin: 0;
+}
+
+#name-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(246, 248, 250, 0.96);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#name-modal {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(91,127,255,0.13);
+    padding: 36px 32px 28px 32px;
+    max-width: 340px;
+    width: 90vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+#name-modal h2 {
+    color: #5b7fff;
+    margin-bottom: 0;
+}
+#name-modal input[type="text"] {
+    padding: 10px 12px;
+    border: 1.5px solid #b3c6ff;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-family: inherit;
+    margin-bottom: 8px;
+    outline: none;
+    transition: border 0.18s;
+}
+#name-modal input[type="text"]:focus {
+    border-color: #5b7fff;
+}
+#name-modal button {
+    background: #5b7fff;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 9px 22px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(60,72,88,0.07);
+    transition: background 0.18s, box-shadow 0.18s;
+}
+#name-modal button:active {
+    background: #3b5fff;
+}
+
+.cert-container {
+    background: linear-gradient(135deg, #fdf6e3 0%, #f7fafc 100%);
+    border: 4px solid #e6b800;
+    border-radius: 22px;
+    box-shadow: 0 6px 32px rgba(91,127,255,0.10), 0 1.5px 0 #e6b800;
+    padding: 44px 38px 32px 38px;
+    max-width: 480px;
+    margin: 40px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    position: relative;
+    min-height: 420px;
+}
+.cert-icon {
+    font-size: 3.2em;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 2px 6px #e6b80044);
+}
+.cert-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: #bfa100;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 0 #fffbe6, 0 2px 8px #e6b80022;
+}
+.cert-body {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.cert-line {
+    font-size: 1.1em;
+    color: #444;
+    margin: 8px 0;
+}
+.cert-name {
+    font-size: 1.7em;
+    font-weight: 600;
+    color: #2d3a4a;
+    margin: 12px 0 12px 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 0 #fffbe6;
+}
+.cert-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    font-size: 1em;
+    color: #888;
+}
+.cert-date span {
+    color: #2d3a4a;
+    font-weight: 500;
+}
+.cert-signature {
+    text-align: right;
+}
+.cert-sign {
+    display: inline-block;
+    border-bottom: 1.5px solid #bfa100;
+    min-width: 80px;
+    margin-left: 8px;
+    color: #bfa100;
+    font-family: 'Brush Script MT', cursive, serif;
+    font-size: 1.1em;
+}
+#certificate button {
+    margin-top: 32px;
+    background: linear-gradient(90deg, #e6b800 0%, #ffe066 100%);
+    color: #2d3a4a;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 32px;
+    font-size: 1.1em;
+    box-shadow: 0 2px 8px #e6b80022;
+    transition: background 0.18s, box-shadow 0.18s;
+}
+#certificate button:active {
+    background: #ffe066;
+}
+@media (max-width: 600px) {
+    .cert-container {
+        padding: 18px 4vw 18px 4vw;
+        max-width: 98vw;
+    }
+    .cert-footer {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
+
+@media print {
+    body, html {
+        background: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+    }
+    #certificate, .cert-container {
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        page-break-inside: avoid !important;
+        break-after: avoid-page !important;
+        break-before: avoid-page !important;
+        break-inside: avoid-page !important;
+    }
+    /* Hide everything except the certificate */
+    body > *:not(#certificate) {
+        display: none !important;
+    }
+    #certificate {
+        display: block !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        background: none !important;
+        padding: 0 !important;
+    }
+    .cert-container {
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        min-height: 0 !important;
+    }
+    /* Remove print button */
+    #certificate button {
+        display: none !important;
+    }
+}

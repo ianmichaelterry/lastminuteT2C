@@ -1,0 +1,38 @@
+{
+  "problems": [
+    {
+      "prompt": "Arrange the code to define a class Dog with a bark method in Python.",
+      "blocks": [
+        { "text": "class Dog:", "correct": true },
+        { "text": "    def bark(self):", "correct": true },
+        { "text": "        print('Woof!')", "correct": true }
+      ],
+      "distractors": [
+        { "text": "def meow(self):", "correct": false },
+        { "text": "print('Meow!')", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Arrange the code to open a file and read its contents in Python.",
+      "blocks": [
+        { "text": "with open('file.txt') as f:", "correct": true },
+        { "text": "    data = f.read()", "correct": true }
+      ],
+      "distractors": [
+        { "text": "open('file.txt', 'w')", "correct": false },
+        { "text": "data = open('file.txt')", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Arrange the code to import the math module and print the value of pi in Python.",
+      "blocks": [
+        { "text": "import math", "correct": true },
+        { "text": "print(math.pi)", "correct": true }
+      ],
+      "distractors": [
+        { "text": "import random", "correct": false },
+        { "text": "print(random.pi)", "correct": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+/* static/generator.css */
+body { background: #f6f8fa; }
+.container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+h1 { color: #5b7fff; }
+label { font-weight: 500; }
+.concepts { margin-bottom: 18px; }
+.concept-group { margin-bottom: 10px; }
+.concept-group label { margin-right: 12px; }
+#result { margin-top: 24px; background: #f4f8ff; border-radius: 6px; padding: 16px; min-height: 80px; }
+#api-url { margin-top: 12px; font-size: 0.95em; color: #444; }
+pre { background: #e3eaff; border-radius: 4px; padding: 10px; overflow-x: auto; }
+button { background: #5b7fff; color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 1em; cursor: pointer; }
+button:active { background: #3b5fff; }

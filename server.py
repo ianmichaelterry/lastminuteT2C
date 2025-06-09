@@ -116,12 +116,8 @@ The collection should have exactly as many problems as specified in the JSON obj
         )
 
         # Extract the AI-generated content
-        ai_response = response.choices[0].message.content
-
-        # Parse the AI response into JSON
-        problems = json.loads(ai_response)
-
-        return JSONResponse(content=problems)
+        content = response.choices[0].message.content
+        return JSONResponse(content=content)
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error generating problems: {str(e)}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
