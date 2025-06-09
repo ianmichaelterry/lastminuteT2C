@@ -1,64 +1,69 @@
-# Parsons Problem Generator API
+# Parsons Problem Generator (T2c)
 
-This project is a FastAPI-based application for generating Parsons problems, which are educational programming exercises. The application uses OpenAI's GPT model to generate problems based on user-selected programming concepts and difficulty levels.
+This project is a Parsons problem generator web application. It allows teachers and learners to generate structured Parsons problems using AI (OpenAI GPT models) and download them in a format compatible with the T2b Parsons problem app.
 
 ## Features
 
-- **Dynamic Front-End**: A user-friendly front-end built with HTML and JavaScript, dynamically updates based on user input.
-- **AI-Generated Problems**: Uses OpenAI's GPT model to generate Parsons problems tailored to the selected programming language, concepts, and difficulty.
-- **GET API Endpoint**: A `/generate-problems` endpoint that accepts query parameters to generate problems.
-- **Cross-Origin Support**: Configured with CORS middleware to allow requests from any origin.
+- **Interactive Front-End**: Web UI for selecting programming language, concepts, and number of problems.
+- **AI-Generated Problems**: Uses OpenAI's GPT models to generate Parsons problems tailored to your selections.
+- **Downloadable JSON**: Output is compatible with the T2b Parsons problem app (see `t2b/` directory).
+- **API Endpoint**: `/generate-problems` endpoint accepts a base64-encoded JSON specification and returns a batch of problems.
+- **CORS Support**: Configured to allow requests from any origin.
 
 ## Project Structure
 
 ```
-pyproject.toml       # Project configuration file
-README.md            # Project documentation
-server.py            # Main FastAPI application
-uv.lock              # Dependency lock file
-static/              # Static files (e.g., CSS, JS)
-templates/           # HTML templates
-    index.html       # Front-end interface
+ASSIGNMENT.md           # Assignment instructions
+pyproject.toml          # Project configuration
+README.md               # Project documentation (this file)
+server.py               # FastAPI server (AI backend)
+toy.py                  # Standalone script for generating problems
+static/                 # Static files (JS, CSS) for the generator UI
+templates/              # HTML templates for the generator UI
+t2b/                    # T2b Parsons problem app and example batches
 ```
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
+1. **Clone the repository:**
+   ```zsh
    git clone <repository-url>
    cd <repository-folder>
    ```
 
-2. Install dependencies using `uv`:
-   ```bash
+2. **Install dependencies using `uv`:**
+   ```zsh
    uv pip install -r pyproject.toml
    ```
 
-3. Set up environment variables:
+3. **Set up environment variables:**
    Create a `.env` file in the root directory with the following variables:
    ```env
    OPENAI_API_KEY=<your-openai-api-key>
    OPENAI_API_BASE=https://api.openai.com/v1
-   OPENAI_API_MODEL_NAME=gpt-4
+   OPENAI_API_MODEL_NAME=gpt-4o
    ```
 
 ## Running the Application
 
-1. Start the server in debug mode:
-   ```bash
+1. **Start the server:**
+   ```zsh
    uv run uvicorn server:app --reload
    ```
 
-2. Open your browser and navigate to:
-   - Front-end: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-   - API Documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+2. **Open your browser and navigate to:**
+   - Generator UI: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+   - API Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ## Usage
 
-1. Use the front-end interface to select a programming language, concepts, and the number of problems.
-2. The application dynamically generates a URL for the API request.
-3. Click "Preview Result" to fetch and display the generated problems.
-4. Copy the generated URL to use it in other tools or applications.
+1. Use the generator UI to select a programming language, concepts, and number of problems.
+2. Click "Preview Result" to generate a Parsons problem batch.
+3. Copy the generated JSON and save it as a new file (e.g., `batch4.json`) in the `t2b/` directory.
+4. In the T2b app, load your new batch by changing the URL, e.g.:
+   ```
+   https://<your-t2b-app-url>/?specification=batch4.json
+   ```
 
 ## API Reference
 
@@ -67,39 +72,35 @@ templates/           # HTML templates
 Generates Parsons problems based on the provided query parameter.
 
 #### Query Parameter:
-- `specification` (string): A base64-encoded JSON string containing the problem specification. The JSON object should have the following structure:
+- `specification` (string): A base64-encoded JSON string containing the problem specification. Example structure:
   ```json
   {
-      "language": "Python",
-      "concepts": {
-          "Easy": {
-              "Variable Assignment": true,
-              "Basic Arithmetic": false
-          },
-          "Medium": {
-              "Functions": true
-          },
-          "Hard": {
-              "Recursion": false
-          }
-      },
-      "num_problems": 3
+    "language": "Python",
+    "concepts": {
+      "Easy": {"Variable Assignment": true, "Basic Arithmetic": false},
+      "Medium": {"Functions": true},
+      "Hard": {"Recursion": false}
+    },
+    "num_problems": 3
   }
   ```
 
 #### Example Request:
-```bash
-curl "http://127.0.0.1:8000/generate-problems?specification=eyJsYW5ndWFnZSI6ICJQeXRob24iLCAiY29uY2VwdHMiOiB7IkVhc3kiOiB7IlZhcmlhYmxlIEFzc2lnbm1lbnQiOiB0cnVlLCAiQmFzaWMgQXJpdGhtZXRpYyI6IGZhbHNlfSwgIk1lZGl1bSI6IHsiRnVuY3Rpb25zIjogdHJ1ZX0sICJIYXJkIjogeyJSZWN1cnNpb24iOiBmYWxzZX19LCAibnVtX3Byb2JsZW1zIjogM30="
+```zsh
+curl "http://127.0.0.1:8000/generate-problems?specification=$(echo -n '{"language":"Python","concepts":{"Easy":{"Variable Assignment":true},"Medium":{},"Hard":{}},"num_problems":2}' | base64)"
 ```
 
-The `specification` parameter is a base64-encoded string of the JSON object. You can use tools like `btoa` in JavaScript or `base64` in Python to encode the JSON object.
+## T2b Compatibility
+
+- The generated JSON is compatible with the T2b Parsons problem app in the `t2b/` directory.
+- To use a generated batch, save it as a file (e.g., `batch4.json`) in `t2b/` and reference it in the T2b app URL.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+MIT License.
 
 ## Acknowledgments
 
-- Written by [Adam Smith](https://adamsmith.as) using [GitHub Copilot agent mode](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode)
 - Built with [FastAPI](https://fastapi.tiangolo.com/)
 - Powered by [OpenAI GPT](https://openai.com/)
+- Assignment by Adam Smith, UC Santa Cruz
